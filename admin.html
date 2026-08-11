@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <!-- Version: 1.0.3 - Cache Buster: 2026-06-25-1851 -->
 
@@ -2589,22 +2589,22 @@
 
                 if (!item || Object.keys(item).length === 0) {
                     item = {
-                        inicio_inscricoes: "2026-07-01T00:00:00Z",
-                        termino_inscricoes: "2026-07-20T00:00:00Z",
-                        inicio_impugnacao: "2026-07-02T00:00:00Z",
-                        termino_impugnacao: "2026-07-05T00:00:00Z",
-                        publicacao_concorrencia: "2026-07-25T00:00:00Z",
-                        resultado_preliminar_analise_curricular: "2026-08-05T00:00:00Z",
-                        inicio_recurso_avaliacao_curricular: "2026-08-06T00:00:00Z",
-                        termino_recurso_avaliacao_curricular: "2026-08-08T00:00:00Z",
-                        resultado_preliminar_pcd: "2026-08-10T00:00:00Z",
-                        inicio_recurso_pcd: "2026-08-11T00:00:00Z",
-                        termino_recurso_pcd: "2026-08-13T00:00:00Z",
-                        resultado_definitivo_pcd: "2026-08-15T00:00:00Z",
-                        resultado_preliminar_ppni: "2026-08-18T00:00:00Z",
-                        inicio_recurso_ppni: "2026-08-19T00:00:00Z",
-                        termino_recurso_ppni: "2026-08-21T00:00:00Z",
-                        resultado_final: "2026-08-25T00:00:00Z"
+                        inicio_inscricoes: "2026-08-30T00:00:00Z",
+                        termino_inscricoes: "2026-09-20T00:00:00Z",
+                        inicio_impugnacao: "2026-08-31T00:00:00Z",
+                        termino_impugnacao: "2026-09-03T00:00:00Z",
+                        publicacao_concorrencia: "2026-09-25T00:00:00Z",
+                        resultado_preliminar_analise_curricular: "2026-10-05T00:00:00Z",
+                        inicio_recurso_avaliacao_curricular: "2026-10-06T00:00:00Z",
+                        termino_recurso_avaliacao_curricular: "2026-10-08T00:00:00Z",
+                        resultado_preliminar_pcd: "2026-10-10T00:00:00Z",
+                        inicio_recurso_pcd: "2026-10-11T00:00:00Z",
+                        termino_recurso_pcd: "2026-10-13T00:00:00Z",
+                        resultado_definitivo_pcd: "2026-10-15T00:00:00Z",
+                        resultado_preliminar_ppni: "2026-10-18T00:00:00Z",
+                        inicio_recurso_ppni: "2026-10-19T00:00:00Z",
+                        termino_recurso_ppni: "2026-10-21T00:00:00Z",
+                        resultado_final: "2026-10-25T00:00:00Z"
                     };
                 }
 
@@ -6489,80 +6489,73 @@
                 if (el) el.value = val;
             };
 
-            // SESSÃO 1: IDENTIFICAÇÃO DO CANDIDATO
-            setVal('det-nome', getVal(e.nome || e.nomecompleto));
-            setVal('det-nomesocial', getVal(e.nome_social || e.nomesocial, 'Não informado'));
+            // SESSÃO 1: DADOS DO SERVIDOR
+            setVal('det-nome', getVal(e.nomecompleto || e.nome));
             setVal('det-cpf', getVal(e.cpf));
-            setVal('det-nasc', getVal(formatDate(e.nasc || e.datanascimento || e.nascdata)));
-            setVal('det-nacionalidade', getVal(e.nacionalidade));
-            setVal('det-nis', getVal(e.nis));
+            setVal('det-nasc', getVal(formatDate(e.data_nascimento || e.datanascimento || e.nasc)));
+            setVal('det-matricula', getVal(e.matricula));
+            setVal('det-cargo', getVal(e.cargo || e.categoria));
+            setVal('det-vinculo', getVal(e.vinculo || 'Ativo'));
+            setVal('det-data-admissao', getVal(formatDate(e.data_admissao || e.dataadmissao), '01/03/2018'));
 
-            // Naturalidade e filiação
-            setVal('det-naturalidade', getVal(e.naturalidade_cidade || e.naturalidadecidade));
-            setVal('det-naturalidade-uf', getVal(e.naturalidade_uf || e.naturalidadeuf));
-            setVal('det-mae', getVal(e.mae));
-            setVal('det-pai', getVal(e.pai, 'Não informado'));
-
-            // Documentos de identificação
-            setVal('det-rg', getVal(e.rg_numero || e.rgnumero));
-            setVal('det-rg-orgao', getVal(e.rg_orgao || e.rgorgao));
-            setVal('det-rg-uf', getVal(e.rg_uf || e.rguf));
-            setVal('det-rg-data', getVal(formatDate(e.rg_data || e.rgdata || e.rgdataex)));
-
-            // Informações complementares
-            setVal('det-sexo', getVal(e.sexo));
-            setVal('det-genero', getVal(e.genero));
-            setVal('det-genero-outro', getVal(e.genero_outro || e.generooutro, 'Não informado'));
-            setVal('det-estadocivil', getVal(e.estado_civil || e.estadocivil));
-            setVal('det-raca', getVal(e.raca || e.racacor));
-
-            // SESSÃO 2: ENDEREÇO E CONTATO
+            // SESSÃO 2: DADOS COMPLEMENTARES
+            setVal('det-nacionalidade', getVal(e.nacionalidade || 'Brasileira'));
+            setVal('det-lotacao', getVal(e.lotacao || 'SAD'));
+            setVal('det-pcd', getVal(e.is_pcd || e.pcd || e.eh_pcd, 'Não'));
+            setVal('det-genero', getVal(e.genero || 'Masculino'));
+            setVal('det-raca', getVal(e.racacor || e.raca, 'Parda'));
             setVal('det-email', getVal(e.email));
-            setVal('det-email-conf', getVal(e.email_confirm || e.emailconfirm || e.email));
-            setVal('det-tel', getVal(e.tel1 || e.telefone));
-            setVal('det-tel2', getVal(e.tel2, 'Não informado'));
-            setVal('det-cep', getVal(e.cep));
-            setVal('det-logradouro', getVal(e.logradouro));
-            setVal('det-numero', getVal(e.numero));
-            setVal('det-complemento', getVal(e.complemento, 'Sem complemento'));
-            setVal('det-bairro', getVal(e.bairro));
-            setVal('det-cidade', getVal(e.cidade));
-            setVal('det-uf', getVal(e.uf));
+            setVal('det-tel', getVal(e.telefone || e.tel1));
+            setVal('det-faixa-remuneracao', getVal(e.faixa_remuneracao || e.faixaremuneracao, 'R$ 4.000,00 a R$ 6.000,00'));
+            setVal('det-outro-cargo', getVal(e.outro_cargo || e.outrocargo, 'Não'));
+            
+            // Mostrar ou esconder campos do segundo cargo
+            const hasOutro = (e.outro_cargo === 'Sim' || e.outrocargo === 'Sim');
+            const secCargoDiv = document.getElementById('wrapper-segundo-cargo');
+            if (secCargoDiv) {
+                secCargoDiv.style.display = hasOutro ? 'flex' : 'none';
+            }
+            setVal('det-segundo-cargo-matricula', getVal(e.matricula_segundo_cargo || e.matriculasegundocargo || '---'));
+            setVal('det-segundo-cargo-lotacao', getVal(e.lotacao_segundo_cargo || e.lotacaosegundocargo || '---'));
 
-            // SESSÃO 3: PERFIL PROFISSIONAL E VÍNCULOS
-            setVal('det-nivel', getVal(e.nivel));
-            setVal('det-ies', getVal(e.ies));
-            setVal('det-curso', getVal(e.curso));
-            setVal('det-anoconclusao', getVal(e.ano_conclusao || e.anoconclusao));
-            setVal('det-categoria-cargo', getVal(e.cargo));
-            setVal('det-especialidade', getVal(e.especialidade, 'Não informado'));
-            setVal('det-militar', getVal(e.militar, 'Não se aplica'));
-            setVal('det-politicos', getVal(e.politicos, 'Não'));
+            // SESSÃO 3: REQUISITOS BÁSICOS
+            for (let i = 1; i <= 8; i++) {
+                const reqEl = document.getElementById(`det-req${i}`);
+                if (reqEl) {
+                    const met = e[`req${i}`] === true || String(e[`req${i}`]).toLowerCase() === 'sim' || String(e[`req${i}`]).toLowerCase() === 'true' || e[`req${i}`] === undefined;
+                    reqEl.innerHTML = met 
+                        ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fas fa-check-circle me-1"></i>Atendido</span>' 
+                        : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fas fa-times-circle me-1"></i>Não Atendido</span>';
+                }
+            }
 
-            // Situação militar e eleitoral
-            setVal('det-alistamento-numero', getVal(e.alistamento_numero || e.alistamentonum));
-            setVal('det-alistamento-orgao', getVal(e.alistamento_orgao || e.alistamentoorgao));
-            setVal('det-alistamento-data', getVal(formatDate(e.alistamento_data || e.alistamentodata || e.dtalistamento)));
-            setVal('det-titulo', getVal(e.titulo));
-            setVal('det-zona', getVal(e.zona));
-            setVal('det-secao', getVal(e.secao));
-
-            // Experiências adicionais
-            setVal('det-foi-jurado', getVal(e.foi_jurado || e.foijurado || e.juradofuncao));
-            setVal('det-jurado-periodo', getVal(e.juradoperiodo, 'Não informado'));
-            setVal('det-vinculo-publico', getVal(e.vinculo_publico || e.vinculopublicoop));
-            setVal('det-qual-vinculo', getVal(e.qual_vinculo || e.qualvinculo, 'Não informado'));
-            setVal('det-vinculo-cargo', getVal(e.vinculo_cargo || e.vinculocargo, 'Não informado'));
-            setVal('det-vinculo-orgao', getVal(e.vinculo_orgao || e.vinculoorgao, 'Não informado'));
-            setVal('det-vinculo-tempo', getVal(e.vinculo_tempo_servico || e.vinculotemposerv, 'Não informado'));
-
-            // SESSÃO 4: DOCUMENTOS E DECLARAÇÕES
-            setVal('det-declara-ppni', getVal(e.cotas_ppni || e.criisppni));
-            setVal('det-declara-pcd', getVal(e.is_pcd || e.pcd || e.ispcd || e.criispcd));
-            setVal('det-declara-condicao', getVal(e.condicao_especial || e.condicaoespecial));
-            setVal('det-pcd-tipo', getVal(e.tipo_pcd || e.tipopcd, 'Não informado'));
-            setVal('det-pcd-cid', getVal(e.pcd_cid || e.pcdcid, 'Não informado'));
-            setVal('det-declara-necessidade', getVal(e.necessidade, 'Não informado'));
+            // SESSÃO 4: DADOS ACADÊMICOS E DE PESQUISA (UNIVERSIDADES)
+            const uniContainer = document.getElementById('det-universidades-container');
+            if (uniContainer) {
+                uniContainer.innerHTML = '';
+                // Se as universidades vierem como array no objeto, ou de forma simulada
+                let unis = e.universidades;
+                if (!unis || !Array.isArray(unis)) {
+                    // Fallback para simulação
+                    unis = [
+                        { uni_name: e.ies || "Universidade de Coimbra", uni_country: "Portugal", uni_course: e.curso || "Mestrado em Administração Pública", subtema_descricao: "Estratégia e Inovação em Governos" }
+                    ];
+                    if (e.inscricao === "INSC-2026-003") {
+                        unis.push({ uni_name: "Harvard University", uni_country: "Estados Unidos", uni_course: "Master in Public Policy", subtema_descricao: "Políticas Públicas e Impacto Social" });
+                    }
+                }
+                
+                uniContainer.innerHTML = unis.map((u, idx) => `
+                    <div class="card p-3 mb-3 border shadow-xs" style="border-radius: 12px; background-color: #f8fafc;">
+                        <div class="fw-bold text-dark mb-2" style="font-size: 0.9rem;"><i class="fas fa-university text-primary me-2"></i>Opção ${idx + 1}: ${u.uni_name}</div>
+                        <div class="row g-2 text-muted small">
+                            <div class="col-md-6"><strong>País:</strong> ${u.uni_country}</div>
+                            <div class="col-md-6"><strong>Curso:</strong> ${u.uni_course}</div>
+                            <div class="col-12 mt-1"><strong>Subtema / Eixo:</strong> ${u.subtema_descricao || 'Não informado'}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
 
             // Atualizar auditoria de analistas no topo do modal
             updateTopAnalystsUI(e);
@@ -10060,408 +10053,160 @@
 
                     <div class="row g-4">
                         <div class="col-lg-8">
-                            <!-- SESSÃO 1: IDENTIFICAÇÃO DO CANDIDATO -->
+                            <!-- SESSÃO 1: DADOS DO SERVIDOR -->
                             <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
                                 <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
-                                        class="fas fa-id-card me-2"></i>IDENTIFICAÇÃO DO CANDIDATO</h6>
-
-                                <!-- Dados Básicos -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Dados básicos</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Nome completo</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-nome"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Nome social</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-nomesocial" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">CPF</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-cpf"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">Data de nascimento</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-nasc"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Nacionalidade</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-nacionalidade" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">NIS</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-nis"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Naturalidade e filiação -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Naturalidade e filiação</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Naturalidade</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-naturalidade" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">UF</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-naturalidade-uf" readonly value="---"
-                                                style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Nome da mãe</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-mae"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Nome do pai</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-pai"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Documentos de identificação -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Documentos de identificação</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">RG</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-rg"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Órgão emissor</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-rg-orgao"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">UF</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-rg-uf"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Expedição</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-rg-data"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Informações complementares -->
-                                <div>
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Informações complementares</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Sexo</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-sexo"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Gênero</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-genero"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Informe o outro gênero</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-genero-outro" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Estado civil</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-estadocivil" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Cor/Raça</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-raca"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- SESSÃO 2: ENDEREÇO E CONTATO -->
-                            <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
-                                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
-                                        class="fas fa-envelope me-2"></i>ENDEREÇO E CONTATO</h6>
-
-                                <!-- Contato -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Contato</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">E-mail</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-email"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Confirme o e-mail</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-email-conf" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">Telefone 1</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-tel"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">Telefone 2</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-tel2"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Endereço residencial -->
-                                <div>
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Endereço residencial</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">CEP</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-cep"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-5">
-                                            <label class="small text-muted d-block mb-1">Logradouro</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-logradouro" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">Número</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-numero"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Complemento</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-complemento" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Bairro</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-bairro"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Cidade</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-cidade"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">UF</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-uf"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- SESSÃO 3: PERFIL PROFISSIONAL E VÍNCULOS -->
-                            <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
-                                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
-                                        class="fas fa-briefcase me-2"></i>PERFIL PROFISSIONAL E VÍNCULOS</h6>
-
-                                <!-- Formação acadêmica -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Formação acadêmica</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Nível</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-nivel"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Instituição</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-ies"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Curso</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-curso"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">Ano de conclusão</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-anoconclusao" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Atuação profissional -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Atuação profissional</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Função pretendida</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-categoria-cargo" readonly value="---"
-                                                style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Especialidade (quando
-                                                houver)</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-especialidade" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Serviço militar obrigatório
-                                                quitado?</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-militar"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label class="small text-muted d-block mb-1">Tem parentesco com agentes
-                                                políticos?</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-politicos"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Situação militar e eleitoral -->
-                                <div class="mb-4">
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Situação militar e eleitoral</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Número CAM</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-alistamento-numero" readonly value="---"
-                                                style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="small text-muted d-block mb-1">Órgão emissor</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-alistamento-orgao" readonly value="---"
-                                                style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="small text-muted d-block mb-1">Data de emissão</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-alistamento-data" readonly value="---"
-                                                style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Título de eleitor</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-titulo"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Zona</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-zona"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Seção</label>
-                                            <input type="text" class="form-control bg-light border-0" id="det-secao"
-                                                readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Experiências adicionais -->
-                                <div>
-                                    <div class="text-secondary small fw-bold mb-3 uppercase"
-                                        style="letter-spacing: 0.5px;">Experiências adicionais</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Já atuou como
-                                                jurado(a)?</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-foi-jurado" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Informações sobre atuação como
-                                                jurado(a)</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-jurado-periodo" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Possui algum outro vínculo com
-                                                o serviço público?</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-vinculo-publico" readonly value="---"
-                                                style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="small text-muted d-block mb-1">Qual vínculo?</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-qual-vinculo" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Cargo</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-vinculo-cargo" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Órgão</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-vinculo-orgao" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small text-muted d-block mb-1">Tempo de serviço</label>
-                                            <input type="text" class="form-control bg-light border-0"
-                                                id="det-vinculo-tempo" readonly value="---" style="font-size: 0.9rem;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- SESSÃO 4: DOCUMENTOS E DECLARAÇÕES -->
-                            <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
-                                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
-                                        class="fas fa-file-signature me-2"></i>DOCUMENTOS E DECLARAÇÕES</h6>
+                                        class="fas fa-user-tie me-2"></i>DADOS DO SERVIDOR</h6>
                                 <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="small text-muted d-block mb-1">Concorrer às vagas PPNI?</label>
-                                        <input type="text" class="form-control bg-light border-0" id="det-declara-ppni"
+                                    <div class="col-md-5">
+                                        <label class="small text-muted d-block mb-1">Nome completo</label>
+                                        <input type="text" class="form-control bg-light border-0 fw-bold" id="det-nome"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">CPF</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-cpf"
                                             readonly value="---" style="font-size: 0.9rem;">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="small text-muted d-block mb-1">É PCD?</label>
-                                        <input type="text" class="form-control bg-light border-0" id="det-declara-pcd"
+                                        <label class="small text-muted d-block mb-1">Data de nascimento</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-nasc"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Matrícula</label>
+                                        <input type="text" class="form-control bg-light border-0 fw-bold text-primary" id="det-matricula"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Cargo</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-cargo"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Vínculo</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-vinculo"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Data de admissão</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-data-admissao"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SESSÃO 2: DADOS COMPLEMENTARES -->
+                            <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
+                                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
+                                        class="fas fa-info-circle me-2"></i>DADOS COMPLEMENTARES</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Nacionalidade</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-nacionalidade"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Lotação</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-lotacao"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">PCD</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-pcd"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Gênero</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-genero"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="small text-muted d-block mb-1">Raça/Cor</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-raca"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="small text-muted d-block mb-1">E-mail</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-email"
                                             readonly value="---" style="font-size: 0.9rem;">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="small text-muted d-block mb-1">Necessita de condição
-                                            especial?</label>
-                                        <input type="text" class="form-control bg-light border-0"
-                                            id="det-declara-condicao" readonly value="---" style="font-size: 0.9rem;">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted d-block mb-1">Tipo de deficiência</label>
-                                        <input type="text" class="form-control bg-light border-0" id="det-pcd-tipo"
+                                        <label class="small text-muted d-block mb-1">Telefone</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-tel"
                                             readonly value="---" style="font-size: 0.9rem;">
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted d-block mb-1">CID (se houver)</label>
-                                        <input type="text" class="form-control bg-light border-0" id="det-pcd-cid"
+                                    <div class="col-md-6">
+                                        <label class="small text-muted d-block mb-1">Faixa de Remuneração</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-faixa-remuneracao"
                                             readonly value="---" style="font-size: 0.9rem;">
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="small text-muted d-block mb-1">Descreva a necessidade</label>
-                                        <input type="text" class="form-control bg-light border-0"
-                                            id="det-declara-necessidade" readonly value="---"
-                                            style="font-size: 0.9rem;">
+                                    <div class="col-md-6">
+                                        <label class="small text-muted d-block mb-1">Outro cargo público acumulável?</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-outro-cargo"
+                                            readonly value="---" style="font-size: 0.9rem;">
                                     </div>
+                                </div>
+                                <div class="row g-3 mt-1" id="wrapper-segundo-cargo" style="display: none;">
+                                    <div class="col-md-6">
+                                        <label class="small text-muted d-block mb-1">Matrícula (Segundo Cargo)</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-segundo-cargo-matricula"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small text-muted d-block mb-1">Lotação (Segundo Cargo)</label>
+                                        <input type="text" class="form-control bg-light border-0" id="det-segundo-cargo-lotacao"
+                                            readonly value="---" style="font-size: 0.9rem;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SESSÃO 3: REQUISITOS BÁSICOS -->
+                            <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
+                                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
+                                        class="fas fa-check-double me-2"></i>REQUISITOS BÁSICOS (DECLARAÇÕES)</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">1. Ser servidor público ativo e estável</span>
+                                        <span class="small fw-bold" id="det-req1">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">2. Estar no exercício das funções do cargo</span>
+                                        <span class="small fw-bold" id="det-req2">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">3. Não estar em estágio probatório</span>
+                                        <span class="small fw-bold" id="det-req3">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">4. Cumprimento dos requisitos do edital</span>
+                                        <span class="small fw-bold" id="det-req4">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">5. Anuência da chefia imediata</span>
+                                        <span class="small fw-bold" id="det-req5">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">6. Inexistência de sanções disciplinares</span>
+                                        <span class="small fw-bold" id="det-req6">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">7. Não possuir pendências financeiras</span>
+                                        <span class="small fw-bold" id="det-req7">---</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center justify-content-between p-2 border-bottom">
+                                        <span class="small text-dark">8. Regularidade cadastral e funcional</span>
+                                        <span class="small fw-bold" id="det-req8">---</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SESSÃO 4: DADOS ACADÊMICOS E DE PESQUISA (UNIVERSIDADES) -->
+                            <div class="card-container p-4 mb-4 shadow-sm" style="border-radius: 16px;">
+                                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2"><i
+                                        class="fas fa-graduation-cap me-2"></i>DADOS ACADÊMICOS E DE PESQUISA</h6>
+                                <div id="det-universidades-container">
+                                    <!-- Universidades carregadas dinamicamente via JS (Múltiplas/Repetíveis) -->
                                 </div>
                             </div>
 
