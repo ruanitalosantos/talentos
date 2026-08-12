@@ -6447,6 +6447,18 @@
                 if (el) el.value = val;
             };
 
+            const formatRemuneracao = (val) => {
+                if (val === null || val === undefined || String(val).trim() === '') return '---';
+                const clean = String(val).trim().toLowerCase();
+                const mapping = {
+                    'ate_8999': 'Até R$ 8.999,99',
+                    '9000_12999': 'De R$ 9.000,00 a R$ 12.999,99',
+                    '13000_14999': 'De R$ 13.000,00 a R$ 14.999,99',
+                    'acima_14999': 'Acima de R$ 14.999,99'
+                };
+                return mapping[clean] || val;
+            };
+
             // SESSÃO 1: DADOS DO SERVIDOR
             setVal('det-nome', getVal(e.nomecompleto || e.nome));
             setVal('det-cpf', getVal(e.cpf));
@@ -6464,7 +6476,7 @@
             setVal('det-raca', getVal(e.racacor || e.raca, 'Parda'));
             setVal('det-email', getVal(e.email));
             setVal('det-tel', getVal(e.telefone || e.tel1));
-            setVal('det-faixa-remuneracao', getVal(e.faixa_remuneracao || e.faixaremuneracao, 'R$ 4.000,00 a R$ 6.000,00'));
+            setVal('det-faixa-remuneracao', formatRemuneracao(e.faixa_remuneracao || e.faixaremuneracao));
             setVal('det-outro-cargo', getVal(e.outro_cargo || e.outrocargo, 'Não'));
             
             // Mostrar ou esconder campos do segundo cargo
