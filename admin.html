@@ -3240,111 +3240,19 @@
 
         async function fetchEnrollments() {
             try {
+                // Limpar cache de simulação local
+                safeStorage.removeItem('sas_mock_enrollments');
+
                 let data = [];
                 const response = await callWebhook(ENDPOINT + '?t=' + Date.now());
                 if (response && response.ok) {
                     data = await response.json();
                 }
-
-                if (!data || data.length === 0) {
-                    // Carregar dados de simulação local (Mock) se o webhook retornar vazio
-                    const localData = safeStorage.getItem('sas_mock_enrollments');
-                    if (localData) {
-                        data = JSON.parse(localData);
-                    } else {
-                        data = [
-                            {
-                                inscricao: "INSC-2026-001",
-                                nomecompleto: "Maria Eduarda Silva",
-                                cpf: "12345678901",
-                                data_nascimento: "1994-04-12",
-                                email: "maria.eduarda@email.com",
-                                telefone: "(81) 98888-7777",
-                                categoria: "mecanico_leves",
-                                atividade_habilitada: "ATV-001", // Homologação Documental
-                                acatado: "",
-                                analisecurricular: "",
-                                justificativa: "",
-                                pontuacao_excelencia: "0",
-                                pontuacao_plano_conexao: "0",
-                                pontuacao_plano_viabilidade: "0",
-                                pontuacao_motivacao_trajetoria: "0",
-                                pontuacao_motivacao_diferenciais: "0",
-                                pontuacao_experiencia: "0",
-                                score_final: 0,
-                                created_at: "2026-07-29T10:00:00Z"
-                            },
-                            {
-                                inscricao: "INSC-2026-002",
-                                nomecompleto: "João Ricardo Santos",
-                                cpf: "23456789012",
-                                data_nascimento: "1988-11-23",
-                                email: "joao.ricardo@email.com",
-                                telefone: "(81) 97777-6666",
-                                categoria: "mecanico_leves",
-                                atividade_habilitada: "ATV-002", // Análise Curricular
-                                acatado: "",
-                                analisecurricular: "",
-                                justificativa: "",
-                                pontuacao_excelencia: "0",
-                                pontuacao_plano_conexao: "0",
-                                pontuacao_plano_viabilidade: "0",
-                                pontuacao_motivacao_trajetoria: "0",
-                                pontuacao_motivacao_diferenciais: "0",
-                                pontuacao_experiencia: "0",
-                                score_final: 0,
-                                created_at: "2026-07-29T11:30:00Z"
-                            },
-                            {
-                                inscricao: "INSC-2026-003",
-                                nomecompleto: "Ana Clara Souza",
-                                cpf: "34567890123",
-                                data_nascimento: "1991-07-08",
-                                email: "ana.clara@email.com",
-                                telefone: "(81) 96666-5555",
-                                categoria: "mecanico_leves",
-                                atividade_habilitada: "ATV-007", // Julgamento de Recursos
-                                acatado: "Sim",
-                                analisecurricular: "Sim",
-                                justificativa: "",
-                                pontuacao_excelencia: "30",
-                                pontuacao_plano_conexao: "10",
-                                pontuacao_plano_viabilidade: "5",
-                                pontuacao_motivacao_trajetoria: "5",
-                                pontuacao_motivacao_diferenciais: "5",
-                                pontuacao_experiencia: "10",
-                                score_final: 65,
-                                justreccurriculo: "Prezada comissão, solicito a revisão da minha pontuação no Tópico I (Universidade) e no Tópico IV (Experiência). O programa de destino é listado entre os mais bem avaliados e possuo 6 anos comprovados de experiência em mecânica de veículos leves.",
-                                recurso_curricular: true,
-                                situacao: "Pendente",
-                                created_at: "2026-07-29T14:15:00Z"
-                            },
-                            {
-                                inscricao: "INSC-2026-004",
-                                nomecompleto: "Carlos Augusto Oliveira",
-                                cpf: "45678901234",
-                                data_nascimento: "1985-02-17",
-                                email: "carlos.augusto@email.com",
-                                telefone: "(81) 95555-4444",
-                                categoria: "mecanico_leves",
-                                atividade_habilitada: "ATV-002", // Análise Curricular
-                                acatado: "",
-                                analisecurricular: "",
-                                justificativa: "",
-                                pontuacao_excelencia: "0",
-                                pontuacao_plano_conexao: "0",
-                                pontuacao_plano_viabilidade: "0",
-                                pontuacao_motivacao_trajetoria: "0",
-                                pontuacao_motivacao_diferenciais: "0",
-                                pontuacao_experiencia: "0",
-                                score_final: 0,
-                                created_at: "2026-07-29T09:20:00Z"
-                            }
-                        ];
-                        safeStorage.setItem('sas_mock_enrollments', JSON.stringify(data));
-                    }
+                if (!data) {
+                    data = [];
                 }
-                const normalized = (data || []).map(item => {
+            
+            const normalized = (data || []).map(item => {
                     const idVal = item.id || item.id_cadastro || item.idcadastro || '';
                     const mapped = {
                         ...item,
