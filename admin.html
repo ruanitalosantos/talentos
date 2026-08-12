@@ -3043,7 +3043,7 @@
         const navItems = document.querySelectorAll('.nav-item');
         const tabPanes = document.querySelectorAll('.tab-pane');
 
-        function switchTab(tabId) {
+        async function switchTab(tabId) {
             const targetPane = document.getElementById(`tab-${tabId}`);
             if (!targetPane) {
                 switchTab('dashboard');
@@ -3074,24 +3074,23 @@
                 document.getElementById('sidebar').classList.remove('show');
             }
 
-            if (tabId === 'humano' || tabId === 'recursos') {
-                showLoader();
-                fetchEnrollments();
-            } else if (tabId === 'dados_gerais') {
-                showLoader();
-                Promise.all([
-                    fetchEnrollments(),
-                    fetchRankingGeral()
-                ]).finally(() => {
-                    renderDataForTab('dados_gerais');
-                    hideLoader();
-                });
-            } else if (tabId === 'ranking_geral') {
-                showLoader();
-                fetchRankingGeral().then(() => {
-                    renderDataForTab('ranking_geral');
-                    hideLoader();
-                }).catch(() => hideLoader());
+            if (['dashboard', 'humano', 'recursos', 'dados_gerais', 'ranking_geral'].includes(tabId)) {
+                if (window.isInitialLoad) {
+                    renderDataForTab(tabId);
+                } else {
+                    showLoader();
+                    try {
+                        await fetchEnrollments();
+                        if (tabId === 'dados_gerais' || tabId === 'ranking_geral') {
+                            await fetchRankingGeral();
+                        }
+                    } catch (err) {
+                        console.error('Erro ao recarregar dados na troca de aba:', err);
+                    } finally {
+                        renderDataForTab(tabId);
+                        hideLoader();
+                    }
+                }
             } else if (tabId === 'cronograma') {
                 showLoader();
                 fetchCronograma().then(() => {
@@ -9575,6 +9574,7 @@
         };
 
         // Initialize
+        window.isInitialLoad = true;
         document.addEventListener('DOMContentLoaded', async () => {
             showLoader();
             try {
@@ -9592,8 +9592,8 @@
                     // Dashboard como principal em todas as plataformas
                     switchTab('dashboard');
                 }
+                window.isInitialLoad = false;
                 hideLoader();
-
             }
 
             // Auto-refresh a cada 5 minutos
