@@ -3247,45 +3247,96 @@
                 if (response && response.ok) {
                     data = await response.json();
                 }
+
                 if (!data) {
                     data = [];
                 }
-            
-            const normalized = (data || []).map(item => {
+
+                const normalized = (data || []).map(item => {
                     const idVal = item.id || item.id_cadastro || item.idcadastro || '';
+                    
+                    // Mapeamentos de aprovação/status vindos das flags de controle do webhook
+                    const aprovadoFase = item.aprovado_na_fase || item.acatado || item.analisecurricular || '';
+                    const analiseInscricaoMapeada = (aprovadoFase === 'Sim' || aprovadoFase === true || aprovadoFase === 'true') ? 'Sim' : ((aprovadoFase === 'Não' || aprovadoFase === false || aprovadoFase === 'false') ? 'Não' : '');
+                    
+                    const recursoAceitoVal = item.recurso_aceito || '';
+                    const julInscricaoMapeada = (recursoAceitoVal === 'Sim' || recursoAceitoVal === true || recursoAceitoVal === 'true') ? 'Sim' : ((recursoAceitoVal === 'Não' || recursoAceitoVal === false || recursoAceitoVal === 'false') ? 'Não' : '');
+
+                    // Mapeamento explícito de raça e cota PPNI
+                    const racaClean = String(item.raca_cor || item.racacor || item.raca || '').toLowerCase().trim();
+                    const ehPpni = (racaClean === 'parda' || racaClean === 'preta' || racaClean === 'indigena' || item.cotas_ppni === 'Sim' || item.cotas_ppni === true || item.cotas_ppni === 'true');
+                    const cotasPpniVal = ehPpni ? 'Sim' : 'Não';
+
+                    // Mapeamento explícito de PCD
+                    const pcdClean = String(item.pcd || item.is_pcd || item.eh_pcd || '').toLowerCase().trim();
+                    const ehPcd = (pcdClean === 'sim' || pcdClean === 'true' || pcdClean === 's' || item.pcd === true || item.pcd === 'true');
+                    const pcdVal = ehPcd ? 'Sim' : 'Não';
+
+                    // Fallback inteligente para atividade_habilitada com base nas flags e no processo
+                    let atividadeHabilitada = item.atividade_habilitada || item.atividadehabilit || '';
+                    if (!atividadeHabilitada) {
+                        if (item.fase === 'recurso') {
+                            atividadeHabilitada = 'ATV-007'; // Recurso
+                        } else if (analiseInscricaoMapeada === 'Sim') {
+                            atividadeHabilitada = 'ATV-002'; // Análise Curricular
+                        } else {
+                            atividadeHabilitada = 'ATV-001'; // Homologação Documental
+                        }
+                    }
+
                     const mapped = {
                         ...item,
-                        nomecompleto: item.nomecompleto || item.nome || '',
                         id_cadastro: idVal,
                         idcadastro: idVal,
-                        atividade_habilitada: item.atividade_habilitada || item.atividadehabilit || '',
+                        nomecompleto: item.nome_completo || item.nomecompleto || item.nome || '',
+                        data_nascimento: item.data_nascimento || item.datanascimento || item.nasc || '',
+                        data_admissao: item.data_admissao || item.dataadmissao || '',
+                        raca: item.raca_cor || item.racacor || item.raca || '',
+                        racacor: item.raca_cor || item.racacor || item.raca || '',
+                        outro_cargo: item.outro_cargo || item.outrocargo || 'Não',
+                        outrocargo: item.outro_cargo || item.outrocargo || 'Não',
+                        faixa_remuneracao: item.faixa_remuneracao || item.faixaremuneracao || '',
+                        pcd: pcdVal,
+                        is_pcd: pcdVal,
+                        eh_pcd: pcdVal,
+                        cotas_ppni: cotasPpniVal,
+                        eh_ppni: cotasPpniVal,
+                        declaracao_final: item.declaracao_final || item.declaracaofinal || false,
+                        
+                        analiseinscricao: analiseInscricaoMapeada,
+                        analisecurricular: analiseInscricaoMapeada,
+                        acatado: analiseInscricaoMapeada,
+                        
+                        julinscricao: julInscricaoMapeada,
+                        julcurricular: julInscricaoMapeada,
+                        
+                        atividade_habilitada: atividadeHabilitada,
                         categoria: item.categoria || item.cargo || ''
                     };
                     return normalizeCandidateScores(mapped);
                 });
-                const uniqueByCPF = new Map();
-                normalized.forEach(item => {
-                    if (!item.cpf || !item.nomecompleto) return;
-                    const cpfClean = String(item.cpf).replace(/\D/g, '');
-                    if (!cpfClean) return;
 
+                const uniqueByInscricao = new Map();
+                normalized.forEach(item => {
+                    if (!item.inscricao || !item.nomecompleto) return;
+                    const key = String(item.inscricao).trim();
                     const dateVal = new Date(item.created_at || 0).getTime() || 0;
 
-                    if (!uniqueByCPF.has(cpfClean)) {
-                        uniqueByCPF.set(cpfClean, item);
+                    if (!uniqueByInscricao.has(key)) {
+                        uniqueByInscricao.set(key, item);
                     } else {
-                        const existing = uniqueByCPF.get(cpfClean);
+                        const existing = uniqueByInscricao.get(key);
                         const existingDateVal = new Date(existing.created_at || 0).getTime() || 0;
                         if (dateVal > existingDateVal) {
-                            uniqueByCPF.set(cpfClean, item);
+                            uniqueByInscricao.set(key, item);
                         }
                     }
                 });
-                allEnrollments = Array.from(uniqueByCPF.values());
+                
+                allEnrollments = Array.from(uniqueByInscricao.values());
                 updateDashboard();
                 populateDadosGeraisFilters();
-
-                if (isMobile()) {
+            if (isMobile()) {
                     document.querySelectorAll('.nav-item').forEach(item => {
                         if (item.dataset.tab !== 'dashboard') {
                             item.style.display = 'none';
