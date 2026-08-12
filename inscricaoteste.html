@@ -748,38 +748,35 @@
                         <div class="col-md-6">
                             <div class="file-input-wrapper">
                                 <label class="form-label required">1. Currículo atualizado (Anexo I)</label>
-                                <input type="file" class="form-control" accept=".pdf" required id="fileCurriculo" name="fileCurriculo">
+                                <input type="file" class="form-control" accept=".pdf" id="fileCurriculo" name="fileCurriculo">
                                 <div class="form-text">Formato PDF.</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="file-input-wrapper">
                                 <label class="form-label required">2. Comprovante de graduação</label>
-                                <input type="file" class="form-control" accept=".pdf" required id="fileGraduacao" name="fileGraduacao">
+                                <input type="file" class="form-control" accept=".pdf" id="fileGraduacao" name="fileGraduacao">
                                 <div class="form-text">Diploma ou declaração oficial.</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="file-input-wrapper">
                                 <label class="form-label required">3. Carta de aceite/admissão</label>
-                                <input type="file" class="form-control" accept=".pdf" multiple required
-                                    id="fileCartaAceite" name="fileCartaAceite">
+                                <input type="file" class="form-control" accept=".pdf" multiple id="fileCartaAceite" name="fileCartaAceite">
                                 <div class="form-text">Ou comprovante de inscrição ("application").</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="file-input-wrapper">
                                 <label class="form-label required">4. Carta de Motivação (Anexo II)</label>
-                                <input type="file" class="form-control" accept=".pdf" multiple required
-                                    id="fileCartaMotivacao" name="fileCartaMotivacao">
+                                <input type="file" class="form-control" accept=".pdf" multiple id="fileCartaMotivacao" name="fileCartaMotivacao">
                                 <div class="form-text"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="file-input-wrapper">
                                 <label class="form-label required">5. Plano de Aplicação (Anexo III)</label>
-                                <input type="file" class="form-control" accept=".pdf" multiple required
-                                    id="filePlanoAplicacao" name="filePlanoAplicacao">
+                                <input type="file" class="form-control" accept=".pdf" multiple id="filePlanoAplicacao" name="filePlanoAplicacao">
                                 <div class="form-text"></div>
                             </div>
                         </div>
@@ -1253,29 +1250,119 @@
             }
         }
 
-        // Objeto BIND - Dados que vêm do backend
+        // Objeto BIND - Dados que vêm do backend (Mocado para testes rápidos)
         const BIND = {
             dadosComuns: {
-                cpf: '',
-                nomeCompleto: '',
+                cpf: '123.456.789-00',
+                nomeCompleto: 'Ruan Italo da Silva Santos',
+                dataNascimento: '1990-05-14'
             },
             vinculos: [
                 {
-                    matricula: '',
-                    cargo: '',
-                    vinculo: '',
-                    dataAdmissao: ''
-                },
-                {
-                    matricula: '',
-                    cargo: '',
-                    vinculo: '',
-                    dataAdmissao: ''
+                    matricula: '1234567',
+                    cargo: 'Analista de Sistemas',
+                    vinculo: 'Efetivo',
+                    dataAdmissao: '2018-01-10'
                 }
             ]
         };
 
         // Função auxiliar para valores seguros
+                function mockSelectedUniversities() {
+            // Limpa o container primeiro
+            document.getElementById('universitiesContainer').innerHTML = '';
+            uniCount = 0;
+
+            const unisToMock = [
+                { name: 'Massachusetts Institute of Technology (MIT)', country: 'Estados Unidos', course: 'teste', eixoId: '01', subtemaId: '1.1' },
+                { name: 'Princeton University', country: 'Estados Unidos', course: 'teete', eixoId: '01', subtemaId: '1.1' },
+                { name: 'National University of Singapore (NUS)', country: 'Singapura', course: 'tesdte', eixoId: '05', subtemaId: '5.2' },
+                { name: 'Harvard University', country: 'Estados Unidos', course: 'universidade 4 teste', eixoId: '02', subtemaId: '2.1' }
+            ];
+
+            unisToMock.forEach((mock, index) => {
+                addUniversity();
+                // Encontrar o último select de universidade adicionado
+                const uniCards = document.getElementById('universitiesContainer').children;
+                const lastCard = uniCards[uniCards.length - 1];
+                if (lastCard) {
+                    const select = lastCard.querySelector('.uni-select');
+                    const countryInput = lastCard.querySelector('input[name^="uni_country_"]');
+                    const courseInput = lastCard.querySelector('input[name^="uni_course_"]');
+                    
+                    if (select) {
+                        // Garantir que a opção existe no select
+                        let optionFound = false;
+                        for (let opt of select.options) {
+                            if (opt.value.toLowerCase().includes(mock.name.toLowerCase()) || mock.name.toLowerCase().includes(opt.value.toLowerCase())) {
+                                select.value = opt.value;
+                                if (countryInput) countryInput.value = opt.dataset.country || mock.country;
+                                optionFound = true;
+                                break;
+                            }
+                        }
+                        if (!optionFound) {
+                            // Se não achar, adiciona dinamicamente a opção
+                            const opt = document.createElement('option');
+                            opt.value = mock.name;
+                            opt.text = mock.name;
+                            opt.dataset.country = mock.country;
+                            select.add(opt);
+                            select.value = mock.name;
+                            if (countryInput) countryInput.value = mock.country;
+                        }
+                    }
+                    if (courseInput) {
+                        courseInput.value = mock.course;
+                    }
+                    
+                    // Selecionar o rádio de Eixo / Subtema
+                    const radio = lastCard.querySelector(`input[type="radio"][value="${mock.eixoId}|${mock.subtemaId}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                    } else {
+                        const firstRadio = lastCard.querySelector('input[type="radio"]');
+                        if (firstRadio) firstRadio.checked = true;
+                    }
+                }
+            });
+        }
+
+        function mockAllFormData() {
+            // Seleciona e preenche a matrícula
+            const selectMatricula = document.getElementById('matricula');
+            if (selectMatricula && selectMatricula.options.length > 1) {
+                selectMatricula.selectedIndex = 1;
+                onMatriculaChange();
+            }
+
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.value = val;
+            };
+
+            setVal('nacionalidade', 'brasileira');
+            setVal('lotacao', 'SECTI');
+            setVal('pcd', 'nao');
+            setVal('genero', 'masculino');
+            setVal('racaCor', 'preta');
+            setVal('email', 'santosruan096@gmail.com');
+            setVal('telefone', '81993299885');
+            setVal('faixaRemuneracao', 'ate_8999');
+            setVal('outroCargo', 'nao');
+
+            // Marcar todas as declarações como checadas
+            for (let i = 1; i <= 8; i++) {
+                const req = document.getElementById(`req${i}`);
+                if (req) req.checked = true;
+            }
+            const decFinal = document.getElementById('declaracaoFinal');
+            if (decFinal) decFinal.checked = true;
+
+            // Mockar as 4 universidades
+            mockSelectedUniversities();
+        }
+
         function safeValue(v) {
             return v && v !== 'undefined' && v !== 'null' ? v : '';
         }
@@ -1870,8 +1957,10 @@
         // O formulário começa escondido (d-none) e só aparece se o período estiver
         // aberto E o limite NÃO tiver sido atingido.
         document.addEventListener('DOMContentLoaded', async () => {
-            loadUniversities(); // Fetch universities independent of cronograma
-            addUniversity();
+            await loadUniversities(); // Fetch universities independent of cronograma
+            
+            // Popular o formulário com dados mockados e 4 universidades pré-selecionadas
+            mockAllFormData();
 
             let cronogramaData = null;
             let limitReached = false;
