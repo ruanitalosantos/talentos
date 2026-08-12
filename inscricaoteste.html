@@ -1253,7 +1253,7 @@
         // Objeto BIND - Dados que vêm do backend (Mocado para testes rápidos)
         const BIND = {
             dadosComuns: {
-                cpf: '123.456.789-00',
+                cpf: '12345678900',
                 nomeCompleto: 'Ruan Italo da Silva Santos',
                 dataNascimento: '1990-05-14'
             },
@@ -1328,6 +1328,34 @@
             });
         }
 
+                function setDummyFiles() {
+            try {
+                const dummyBlob = new Blob(["%PDF-1.5 dummy content"], { type: "application/pdf" });
+                const dummyFile = new File([dummyBlob], "documento_teste.pdf", { type: "application/pdf" });
+                
+                const fileInputIds = [
+                    'fileCurriculo',
+                    'fileGraduacao',
+                    'fileCartaAceite',
+                    'fileCartaMotivacao',
+                    'filePlanoAplicacao',
+                    'fileEscolhaUniversidade',
+                    'fileCartaAceiteDefinitiva'
+                ];
+                
+                fileInputIds.forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        const dt = new DataTransfer();
+                        dt.items.add(dummyFile);
+                        input.files = dt.files;
+                    }
+                });
+            } catch (e) {
+                console.error('Erro ao injetar arquivos dummy', e);
+            }
+        }
+
         function populateServerFields() {
             // 1. Preencher Nome Completo, CPF e Data de Nascimento
             const nomeInput = document.getElementById('nomeCompleto');
@@ -1391,6 +1419,9 @@
 
             // Mockar as 4 universidades
             mockSelectedUniversities();
+            
+            // Injetar arquivos PDF dummies para o upload do backend nao quebrar
+            setDummyFiles();
         }
 
         function safeValue(v) {
@@ -2238,6 +2269,21 @@
                     });
 
                     const formData = new FormData(form);
+
+                    // Sanitizar CPF, Telefone e Data de Admissão antes de enviar para evitar 500 no banco
+                    if (formData.get('cpf')) {
+                        formData.set('cpf', formData.get('cpf').replace(/\D/g, ''));
+                    }
+                    if (formData.get('telefone')) {
+                        formData.set('telefone', formData.get('telefone').replace(/\D/g, ''));
+                    }
+                    const admissionDate = formData.get('data_admissao');
+                    if (admissionDate && admissionDate.includes('/')) {
+                        const parts = admissionDate.split('/');
+                        if (parts.length === 3) {
+                            formData.set('data_admissao', `${parts[2]}-${parts[1]}-${parts[0]}`);
+                        }
+                    }
 
                     // Torna todos os campos readonly/disabled APÓS capturar o FormData
                     form.querySelectorAll('input, select, textarea').forEach(el => {
