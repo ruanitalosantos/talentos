@@ -7776,8 +7776,11 @@
                     return;
                 }
 
-                // 1. Extrair os dados ricos do candidato (objeto com nome ou CPF) e preencher no modal
-                const richData = docs.find(item => item && (item.nome_completo !== undefined || item.nomecompleto !== undefined || item.cpf !== undefined));
+                // Desembrulhar objeto contendo dadosGerais, universidades, anexos
+                const wrapper = (Array.isArray(docs) && docs.length > 0) ? docs[0] : docs;
+
+                // 1. Extrair os dados ricos do candidato e preencher no modal
+                const richData = wrapper.dadosGerais || wrapper;
                 if (richData) {
                     const tempAnalyst = e.analista;
 
@@ -7807,7 +7810,7 @@
                     e.eh_pcd = e.pcd;
 
                     // Extrair universidades adicionadas
-                    const universities = docs.filter(item => item && item.nome_universidade !== undefined);
+                    const universities = wrapper.universidades || [];
                     e.universidades = universities.map(u => ({
                         uni_name: u.nome_universidade,
                         uni_country: u.pais || u.uni_country || '',
@@ -7926,8 +7929,8 @@
                     }
                 }
 
-                // 2. Filtrar os anexos (exclui candidatos e universidades sem link de arquivo)
-                const rawAttachments = docs.filter(item => item && (item.medialink || item.mediaLink || item.midialink));
+                // 2. Filtrar os anexos
+                const rawAttachments = wrapper.anexos || [];
 
                 const DOC_NAMES = {
                     'fileCurriculo': 'Currículo atualizado (Anexo I)',
