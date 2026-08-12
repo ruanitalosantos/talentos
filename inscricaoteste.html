@@ -1328,7 +1328,37 @@
             });
         }
 
+        function populateServerFields() {
+            // 1. Preencher Nome Completo, CPF e Data de Nascimento
+            const nomeInput = document.getElementById('nomeCompleto');
+            const cpfInput = document.getElementById('cpf');
+            const nascInfo = document.getElementById('dataNascimento');
+
+            if (nomeInput) nomeInput.value = safeValue(BIND.dadosComuns.nomeCompleto);
+            if (cpfInput) cpfInput.value = safeValue(BIND.dadosComuns.cpf);
+            if (nascInfo) nascInfo.value = safeValue(BIND.dadosComuns.dataNascimento);
+
+            // 2. Preencher o select de matricula
+            const selectMatricula = document.getElementById('matricula');
+            if (selectMatricula) {
+                selectMatricula.innerHTML = '<option value="" selected disabled>Selecione...</option>';
+                if (Array.isArray(BIND.vinculos)) {
+                    BIND.vinculos.forEach((v, idx) => {
+                        if (v.matricula) {
+                            const opt = document.createElement('option');
+                            opt.value = idx;
+                            opt.textContent = v.matricula;
+                            selectMatricula.appendChild(opt);
+                        }
+                    });
+                }
+            }
+        }
+
         function mockAllFormData() {
+            // Popular campos do servidor de forma síncrona
+            populateServerFields();
+
             // Seleciona e preenche a matrícula
             const selectMatricula = document.getElementById('matricula');
             if (selectMatricula && selectMatricula.options.length > 1) {
