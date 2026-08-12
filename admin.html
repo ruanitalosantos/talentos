@@ -2553,26 +2553,26 @@
         let selectedRankingIds = new Set(); // IDs selecionados no ranking
         let rpaMapping = []; // Mapeamento Bairro -> RPA
         let dashboardCharts = {}; // Instâncias dos gráficos ApexCharts
-        const ENDPOINT = '';
+        const ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/infos';
         const RPA_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/listar-bairros-rpa';
 
         const TEAM_ENDPOINT = '';
         let rankingGeralData = [];
-        const RANKING_GERAL_ENDPOINT = '';
+        const RANKING_GERAL_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/consultarranking-talentos';
 
         // Cronograma do Programa (Carregado dinamicamente via API)
         let CRONOGRAMA = [];
-        const CRONOGRAMA_ENDPOINT = '';
+        const CRONOGRAMA_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/consultarcronogramas-talentos';
 
         // Configuração dos demais endpoints (Defina os novos webhooks aqui)
-        const NIVEIS_ANALISTAS_ENDPOINT = '';
-        const ATUALIZAR_ATIVIDADE_ENDPOINT = '';
+        const NIVEIS_ANALISTAS_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/consultarniveisanalistas-talentos';
+        const ATUALIZAR_ATIVIDADE_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/rankear-preliminar-talentos';
         const CONVOCAR_RANKING_ENDPOINT = '';
-        const CONSULTAR_ANEXOS_ENDPOINT = '';
+        const CONSULTAR_ANEXOS_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/consultas-especificas-talentos';
         const ATUALIZAR_RESULTADO_PM_ENDPOINT = '';
         const ATUALIZAR_CRITERIOS_ENDPOINT = '';
-        const ATUALIZAR_RECURSOS_ENDPOINT = '';
-        const PROCESSAR_ANALISE_ENDPOINT = '';
+        const ATUALIZAR_RECURSOS_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/rankear-preliminar-talentos';
+        const PROCESSAR_ANALISE_ENDPOINT = 'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/rankear-preliminar-talentos';
         const ATUALIZAR_BANCO_NOTA_ENDPOINT = '';
         const ATUALIZAR_NOTA_POS_RECURSO_ENDPOINT = '';
         const INCLUIR_ANALISTA_ENDPOINT = '';
