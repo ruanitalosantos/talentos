@@ -7776,8 +7776,8 @@
                     return;
                 }
 
-                // 1. Extrair os dados ricos do candidato (primeiro elemento) e preencher no modal
-                const richData = docs[0];
+                // 1. Extrair os dados ricos do candidato (objeto com nome ou CPF) e preencher no modal
+                const richData = docs.find(item => item && (item.nome_completo !== undefined || item.nomecompleto !== undefined || item.cpf !== undefined));
                 if (richData) {
                     const tempAnalyst = e.analista;
 
@@ -7793,6 +7793,28 @@
                         }
                     }
                     if (!e.analista && tempAnalyst) e.analista = tempAnalyst;
+
+                    // Normalizar nomes das propriedades mapeadas
+                    e.nomecompleto = e.nome_completo || e.nomecompleto || e.nome || '';
+                    e.data_nascimento = e.data_nascimento || e.datanascimento || e.nasc || '';
+                    e.data_admissao = e.data_admissao || e.dataadmissao || '';
+                    e.raca = e.raca_cor || e.racacor || e.raca || '';
+                    e.racacor = e.raca_cor || e.racacor || e.raca || '';
+                    e.outro_cargo = e.outro_cargo || e.outrocargo || 'Não';
+                    e.outrocargo = e.outro_cargo || e.outrocargo || 'Não';
+                    e.pcd = (e.pcd === 'sim' || e.pcd === 'Sim' || e.is_pcd === 'Sim' || e.eh_pcd === 'Sim') ? 'Sim' : 'Não';
+                    e.is_pcd = e.pcd;
+                    e.eh_pcd = e.pcd;
+
+                    // Extrair universidades adicionadas
+                    const universities = docs.filter(item => item && item.nome_universidade !== undefined);
+                    e.universidades = universities.map(u => ({
+                        uni_name: u.nome_universidade,
+                        uni_country: u.pais || u.uni_country || '',
+                        uni_course: u.curso_pretendido || u.curso || u.uni_course || '',
+                        subtema_descricao: u.subtema_descricao || '',
+                        eixo_descricao: u.eixo_descricao || ''
+                    }));
 
                     normalizeCandidateScores(e);
 
@@ -7904,11 +7926,18 @@
                     }
                 }
 
-                // 2. Filtrar os anexos (inclui o primeiro se for um anexo válido com link)
-                const hasValidLink = docs[0] && (docs[0].medialink || docs[0].mediaLink || docs[0].midialink);
-                const rawAttachments = hasValidLink ? docs : docs.slice(1);
+                // 2. Filtrar os anexos (exclui candidatos e universidades sem link de arquivo)
+                const rawAttachments = docs.filter(item => item && (item.medialink || item.mediaLink || item.midialink));
 
                 const DOC_NAMES = {
+                    'fileCurriculo': 'Currículo atualizado (Anexo I)',
+                    'fileGraduacao': 'Comprovante de graduação concluída',
+                    'fileCartaAceite': 'Carta de aceite / admissão',
+                    'fileCartaMotivacao': 'Carta de Motivação (Anexo II)',
+                    'filePlanoAplicacao': 'Plano de Aplicação (Anexo III)',
+                    'fileEscolhaUniversidade': 'Formalização da escolha da Universidade',
+                    'fileCartaAceiteDefinitiva': 'Carta de aceite versão definitiva',
+                    
                     'doc_id_frente': 'Identidade (Frente)',
                     'doc_id_verso': 'Identidade (Verso)',
                     'doc_cpf': 'CPF',
