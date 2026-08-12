@@ -8000,12 +8000,19 @@
                     }
 
                     // Apenas permitir PDF, PNG, JPEG, JPG, HEIC e MP4 (utiliza limite específico de fim ou início de query)
+                    const format = String(doc.formato_arquivo || doc.formatoArquivo || '').toLowerCase();
                     const allowedExts = /\.(pdf|png|jpeg|jpg|heic|mp4)($|\?|&)/i;
-                    if (!allowedExts.test(link) && !allowedExts.test(nomeRaw) && !nome.toLowerCase().includes('pdf') && !nomeRaw.toLowerCase().includes('pdf')) {
+                    const isPDF = allowedExts.test(link) || allowedExts.test(nomeRaw) || 
+                                  nome.toLowerCase().includes('pdf') || nomeRaw.toLowerCase().includes('pdf') ||
+                                  format.includes('pdf');
+                    const isImage = format.includes('image') || format.includes('png') || format.includes('jpeg') || format.includes('jpg');
+                    const isVideo = format.includes('video') || format.includes('mp4');
+
+                    if (!isPDF && !isImage && !isVideo && !allowedExts.test(link) && !allowedExts.test(nomeRaw)) {
                         return null;
                     }
 
-                    return { link, nome, nomeRaw, categoria_doc: doc.categoria_doc || '' };
+                    return { link, nome, nomeRaw, categoria_doc: doc.categoria_doc || '', formato_arquivo: doc.formato_arquivo || doc.formatoArquivo || '' };
                 }).filter(x => x !== null);
 
                 // Se todos os documentos foram filtrados, mostra a mensagem de vazio
@@ -8961,10 +8968,11 @@
                     btnOpenTab.classList.remove('d-none');
                 }
 
-                const isImg = /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.link) || /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.nomeRaw);
-                const isHeic = /\.heic($|\?|&)/i.test(doc.link) || /\.heic($|\?|&)/i.test(doc.nomeRaw);
-                const isPdf = /\.pdf($|\?|&)/i.test(doc.link) || /\.pdf($|\?|&)/i.test(doc.nomeRaw || '') || doc.nome.toLowerCase().includes('pdf') || (doc.nomeRaw && doc.nomeRaw.toLowerCase().includes('pdf'));
-                const isMp4 = /\.mp4($|\?|&)/i.test(doc.link) || /\.mp4($|\?|&)/i.test(doc.nomeRaw || '');
+                const format = String(doc.formato_arquivo || doc.formato_arquivo || '').toLowerCase();
+                const isImg = /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.link) || /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.nomeRaw) || format.includes('image') || format.includes('png') || format.includes('jpeg') || format.includes('jpg');
+                const isHeic = /\.heic($|\?|&)/i.test(doc.link) || /\.heic($|\?|&)/i.test(doc.nomeRaw) || format.includes('heic');
+                const isPdf = /\.pdf($|\?|&)/i.test(doc.link) || /\.pdf($|\?|&)/i.test(doc.nomeRaw || '') || doc.nome.toLowerCase().includes('pdf') || (doc.nomeRaw && doc.nomeRaw.toLowerCase().includes('pdf')) || format.includes('pdf');
+                const isMp4 = /\.mp4($|\?|&)/i.test(doc.link) || /\.mp4($|\?|&)/i.test(doc.nomeRaw || '') || format.includes('video') || format.includes('mp4');
 
                 if (loading) loading.classList.add('d-none');
                 if (iframe) { iframe.classList.add('d-none'); iframe.src = ''; }
@@ -9076,10 +9084,11 @@
                 const frame = document.getElementById('viewerFrame');
                 const img = document.getElementById('viewerImage');
                 const video = document.getElementById('viewerVideo');
-                const isImg = /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.link) || /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.nomeRaw);
-                const isHeic = /\.heic($|\?|&)/i.test(doc.link) || /\.heic($|\?|&)/i.test(doc.nomeRaw);
-                const isPdf = /\.pdf($|\?|&)/i.test(doc.link) || /\.pdf($|\?|&)/i.test(doc.nomeRaw || '') || doc.nome.toLowerCase().includes('pdf') || (doc.nomeRaw && doc.nomeRaw.toLowerCase().includes('pdf'));
-                const isMp4 = /\.mp4($|\?|&)/i.test(doc.link) || /\.mp4($|\?|&)/i.test(doc.nomeRaw || '');
+                const format = String(doc.formato_arquivo || doc.formato_arquivo || '').toLowerCase();
+                const isImg = /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.link) || /\.(jpg|jpeg|png)($|\?|&)/i.test(doc.nomeRaw) || format.includes('image') || format.includes('png') || format.includes('jpeg') || format.includes('jpg');
+                const isHeic = /\.heic($|\?|&)/i.test(doc.link) || /\.heic($|\?|&)/i.test(doc.nomeRaw) || format.includes('heic');
+                const isPdf = /\.pdf($|\?|&)/i.test(doc.link) || /\.pdf($|\?|&)/i.test(doc.nomeRaw || '') || doc.nome.toLowerCase().includes('pdf') || (doc.nomeRaw && doc.nomeRaw.toLowerCase().includes('pdf')) || format.includes('pdf');
+                const isMp4 = /\.mp4($|\?|&)/i.test(doc.link) || /\.mp4($|\?|&)/i.test(doc.nomeRaw || '') || format.includes('video') || format.includes('mp4');
 
                 document.getElementById('viewerTitle').innerText = doc.nome;
                 document.getElementById('doc-counter').innerText = `${index + 1} / ${window.currentDocs.length}`;
